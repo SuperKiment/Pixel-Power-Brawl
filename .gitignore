@@ -23,3 +23,5 @@
 hs_err_pid*
 replay_pid*
 epsi-pixel-power-brawl/src/main/resources/application.properties
+
+.vscode
