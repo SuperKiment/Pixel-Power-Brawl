@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="colonne parent">
+        <div class="container">
+            <div class="colonne enfant">
+                <div class="titre-colonne">
+                    Article
+                    <button (click)="openPopupForm()">+</button>
+                </div>
+                <div *ngFor="let article of articles">
+                    {{ article.nomArticle }}
+                    <button (click)="deleteArticle(article.nomArticle)">-</button>
+                </div>
+            </div>
+            <div class="colonne enfant">
+                <div class="titre-colonne">
+                    Quantité
+                </div>
+                <div *ngFor="let article of articles">
+                    <p>
+                        {{ article.quantiteArticle }}
+                    </p>
+                </div>
+            </div>
+            <div class="colonne enfant">
+                <div class="titre-colonne">
+                    Prix Individuel
+                </div>
+                <div *ngFor="let article of articles">
+                    <p>
+                        {{ article.prixArticle }}€
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="colonne parent">
+        <div class="container">
+            <div class="colonne enfant">
+                <div class="titre-colonne">
+                    Ticket de Caisse
+                </div>
+                <div *ngFor="let article of articles">
+                    <p>
+                        {{ getTotalPriceFromArticle(article) }}€
+                    </p>
+                </div>
+                <p> Prix Total : {{ getTotalPriceAllArticles() }}€
+            </div>
+        </div>
+    </div>
+</div>

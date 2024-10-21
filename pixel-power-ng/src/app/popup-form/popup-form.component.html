@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Ajouter un article</h2>
+<mat-dialog-content>
+  <form>
+    <mat-form-field>
+      <mat-label>Nom de l'article</mat-label>
+      <input matInput [(ngModel)]="nomArticle" name="nomArticle" required placeholder="nom" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Quantité</mat-label>
+      <input matInput type="number" [(ngModel)]="quantiteArticle" name="quantiteArticle" required placeholder="quantite" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Prix</mat-label>
+      <input matInput type="number" [(ngModel)]="prixArticle" name="prixArticle" required placeholder="prix" />
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Annuler</button>
+  <button mat-button color="primary" (click)="onSubmit()">Envoyer</button>
+</mat-dialog-actions>
+
