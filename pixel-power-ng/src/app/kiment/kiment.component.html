@@ -1,0 +1,54 @@
+<div class="columns">
+  <div class="liste">
+    <h2>Liste</h2>
+    <div class="button-add">
+      <button (click)="onPlusClick()">+</button>
+      <div *ngIf="isFormVisible">
+        <form (submit)="onSubmit($event, form)" #form="ngForm">
+          <input name="nom" placeholder="Nom" ngModel required />
+          <input
+            name="quantite"
+            type="number"
+            placeholder="Quantite"
+            ngModel
+            required
+          />
+          <input
+            name="prix"
+            type="number"
+            placeholder="Prix"
+            ngModel
+            required
+          />
+
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+    <ul>
+      <li class="article">
+        <p>Nom :</p>
+        <p>Quantité :</p>
+        <p>Prix (€/pc) :</p>
+      </li>
+      <li *ngFor="let element of liste" class="article">
+        <p>{{ element.nom }}</p>
+        <p>{{ element.quantite }}</p>
+        <p>{{ element.prix }}€</p>
+      </li>
+    </ul>
+  </div>
+  <div class="ticket">
+    <h2>Ticket</h2>
+    <br />
+    <ul>
+      <li class="ticket-item">
+        <p>Prix Total :</p>
+      </li>
+      <li *ngFor="let element of liste" class="ticket-item">
+        <p>{{ element.quantite * element.prix }}€</p>
+      </li>
+      <li class="ticket-item">Prix Final : {{ prixTotal }}€</li>
+    </ul>
+  </div>
+</div>
