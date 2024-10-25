@@ -1,25 +1,42 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 export interface Article {
   nom: string;
   quantite: number;
   prix: number;
+  id: number;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class ServiceKimentService {
-  private liste: Article[] = [{ nom: 'coucou', quantite: 5, prix: 6 }];
+  private liste: Article[] = [];
+  private urlAPI: string = 'http://localhost:8081';
 
-  constructor() {}
+  constructor(private httpClient: HttpClient) {}
 
-  getListe(): Article[] {
-    return this.liste;
+  getArticles(): Observable<Article[]> {
+    return this.httpClient.get<Article[]>(this.urlAPI + '/api/articles');
   }
 
-  addArticle(article: Article): void {
-    this.liste.push(article);
+  removeArticle(index: number): Observable<void> {
+    const deleteURL = this.urlAPI + '/api/articles/' + index;
+    console.log(deleteURL);
+
+    return this.httpClient.delete<void>(deleteURL);
+  }
+
+  addArticle(article: Article): Observable<Article> {
+    const addURL = this.urlAPI + '/api/articles';
+
+    return this.httpClient.post<Article>(addURL, {
+      libelle: article.nom,
+      quantity: article.quantite,
+      price: article.prix,
+    });
   }
 
   getPrixTotal(): number {
