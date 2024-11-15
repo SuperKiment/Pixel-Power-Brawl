@@ -32,7 +32,7 @@
         <p>Prix (€/pc) :</p>
       </li>
       <li *ngFor="let element of liste" class="article">
-        <p>{{ element.nom }}</p>
+        <p><button (click)="onSupprimer(element.id)">Supprimer</button> {{ element.id }} : {{ element.nom }}</p>
         <p>{{ element.quantite }}</p>
         <p>{{ element.prix }}€</p>
       </li>
