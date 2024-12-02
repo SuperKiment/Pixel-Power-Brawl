@@ -1,0 +1,19 @@
+.detail-container {
+  border: 3px solid white;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.two-columns {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+}
+
+.stats {
+  padding: 15px;
+}
+
+.three-two-columns {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+}

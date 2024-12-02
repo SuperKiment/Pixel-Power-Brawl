@@ -32,11 +32,15 @@ export class ServiceKimentService {
   addArticle(article: Article): Observable<Article> {
     const addURL = this.urlAPI + '/api/articles';
 
-    return this.httpClient.post<Article>(addURL, {
+    const content = {
       libelle: article.nom,
       quantity: article.quantite,
       price: article.prix,
-    });
+    };
+
+    console.log('sent : ' + content);
+
+    return this.httpClient.post<Article>(addURL, content);
   }
 
   getPrixTotal(): number {
