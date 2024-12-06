@@ -3,11 +3,48 @@
 html,
 body {
   height: 100%;
-  background-color: darkslategrey;
+  background-color: black;
   margin: 0;
 }
 
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
   color: white;
+  padding: 3%;
+}
+
+.button-style {
+  background-color: #db504a;
+  color: white;
+  border: 0 solid black;
+  padding: 15px;
+  border-radius: 100px;
+  margin: 5px;
+}
+
+.button-style:hover {
+  background-color: #FF6F59;
+  cursor: pointer;
+}
+
+.navbar-container {
+  background-color: #254441;
+  border-radius: 50px;
+  padding: 1%;
+  margin: 1%;
+}
+
+.navbar-logo {
+  display: flex;
+  flex-direction: row;
+}
+
+.logo {
+  height: 100px;
+}
+
+.component-container {
+  background-color: #254441;
+  border-radius: 50px;
+  padding: 3%;
 }

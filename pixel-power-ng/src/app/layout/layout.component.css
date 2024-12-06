@@ -4,3 +4,8 @@
 .navbar {
 
 }
+
+.component-container {
+  max-width: 1128px;
+  margin: auto;
+}

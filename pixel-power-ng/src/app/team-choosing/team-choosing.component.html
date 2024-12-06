@@ -1,0 +1,52 @@
+<div class="columns">
+  <form [formGroup]="selectForm" (ngSubmit)="onSubmitTeam2()">
+    <div
+      *ngFor="let pokemonMember of [0, 1, 2, 3, 4, 5]; let memberIndex = index"
+      class="pokemon-member-choose"
+    >
+      <div class="two-columns">
+        <select
+          formControlName="memberSelected{{ memberIndex }}"
+          id="memberSelected{{ memberIndex }}"
+          class="button-style"
+          title="memberSelected{{ memberIndex }}"
+        >
+          <option
+            *ngFor="let pokemon of allPokemons; let i = index"
+            [value]="i"
+          >
+            {{
+              pokemon.pokedexID +
+                " - " +
+                pokemon.name +
+                (pokemon.isShiny ? " ★" : "")
+            }}
+          </option>
+        </select>
+        <div class="two-columns">
+          <img src="{{ getPokemonMemberTypes(memberIndex)[0] }}" alt="" />
+          <img src="{{ getPokemonMemberTypes(memberIndex)[1] }}" alt="" />
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3" class="button-style">
+      Fin
+    </button>
+  </form>
+
+  <div class="images-team">
+    <div *ngFor="let i of [0, 2, 4]" class="images-team-container">
+      <div *ngFor="let j of [0, 1]" class="images-team-row">
+        <div class="{{ getPokemonMember(i + j)?.isShiny ? 'shiny' : '' }}">
+          <img
+            src="{{ getPokemonMemberSprite(i + j) }}"
+            alt=""
+            (click)="spriteClicked(i + j)"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <detail-pokemon [selectedPokemon]="selectedPokemon" />
+</div>

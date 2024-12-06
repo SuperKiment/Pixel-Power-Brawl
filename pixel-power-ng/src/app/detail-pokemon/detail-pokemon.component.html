@@ -1,0 +1,80 @@
+<div class="detail-container">
+  <div *ngIf="selectedPokemon; else cadrevide">
+    <div class="two-columns">
+      <p>Nom :</p>
+      <p>{{ selectedPokemon.name }}</p>
+    </div>
+    <div class="two-columns">
+      <p>Catégorie :</p>
+      <p>{{ selectedPokemon.category }}</p>
+    </div>
+    <div class="two-columns">
+      <p>ID :</p>
+      <p>{{ selectedPokemon.pokedexID }}</p>
+    </div>
+
+    <div class="two-columns">
+      <p>Total Stats :</p>
+      <p>
+        {{
+          selectedPokemon.stats.hp +
+            selectedPokemon.stats.atk +
+            selectedPokemon.stats.def +
+            selectedPokemon.stats.spe_atk +
+            selectedPokemon.stats.spe_def +
+            selectedPokemon.stats.vit
+        }}
+      </p>
+    </div>
+
+    <div class="stats">
+      <div class="two-columns">
+        <div>
+          <div class="three-two-columns">
+            <p>HP :</p>
+            <p>{{ selectedPokemon.stats.hp }}</p>
+          </div>
+          <div class="three-two-columns">
+            <p>ATK :</p>
+            <p>{{ selectedPokemon.stats.atk }}</p>
+          </div>
+          <div class="three-two-columns">
+            <p>DEF :</p>
+            <p>{{ selectedPokemon.stats.def }}</p>
+          </div>
+        </div>
+        <div>
+          <div class="three-two-columns">
+            <p>ATK SPE :</p>
+            <p>{{ selectedPokemon.stats.spe_atk }}</p>
+          </div>
+          <div class="three-two-columns">
+            <p>DEF SPE :</p>
+            <p>{{ selectedPokemon.stats.spe_def }}</p>
+          </div>
+          <div class="three-two-columns">
+            <p>VIT :</p>
+            <p>{{ selectedPokemon.stats.vit }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p>Resistances :</p>
+      <div class="three-col">
+        <div
+          *ngFor="let resistance of selectedPokemon.resistances"
+          class="resistance bg-{{ getMultiplierColor(resistance.multiplier) }}"
+        >
+          <p>{{ resistance.multiplier }}</p>
+          <p>{{ resistance.name }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #cadrevide>
+    <p>Cliquez sur une image de Pokémon pour voir ses informations ici !</p>
+  </ng-template>
+</div>

@@ -66,6 +66,7 @@ export class KimentComponent {
     if (form.value.nom != '') {
       this.kimentService.addArticle(form.value).subscribe((data) => {
         console.log(data);
+        this.updateListe();
       });
       this.onAddArticle();
     }
