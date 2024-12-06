@@ -59,6 +59,19 @@
         </div>
       </div>
     </div>
+
+    <div>
+      <p>Resistances :</p>
+      <div class="three-col">
+        <div
+          *ngFor="let resistance of selectedPokemon.resistances"
+          class="resistance bg-{{ getMultiplierColor(resistance.multiplier) }}"
+        >
+          <p>{{ resistance.multiplier }}</p>
+          <p>{{ resistance.name }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <ng-template #cadrevide>

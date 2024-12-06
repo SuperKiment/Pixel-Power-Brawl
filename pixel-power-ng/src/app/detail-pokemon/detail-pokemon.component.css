@@ -17,3 +17,41 @@
   display: grid;
   grid-template-columns: 3fr 2fr;
 }
+
+.four-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.three-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.bg-very-green {
+  background-color: green;
+}
+
+.bg-green {
+  background-color: greenyellow;
+  color: black;
+}
+
+.bg-gray {
+  background-color: gray;
+}
+
+.bg-red {
+  background-color: coral;
+}
+
+.bg-very-red {
+  background-color: red;
+}
+
+.resistance {
+  padding-left: 10px;
+  padding-bottom: 0;
+  padding-top: 0;
+  margin: 1px;
+}
