@@ -67,8 +67,8 @@
           *ngFor="let resistance of selectedPokemon.resistances"
           class="resistance bg-{{ getMultiplierColor(resistance.multiplier) }}"
         >
+        <p>{{ resistance.name }}</p>
           <p>{{ resistance.multiplier }}</p>
-          <p>{{ resistance.name }}</p>
         </div>
       </div>
     </div>

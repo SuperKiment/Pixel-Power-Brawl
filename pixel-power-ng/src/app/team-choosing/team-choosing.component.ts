@@ -87,7 +87,7 @@ export class TeamChoosingComponent {
     });
   }
 
-  onSubmitTeam2() {
+  onSubmitTeam() {
     console.log(this.selectForm.value);
   }
 

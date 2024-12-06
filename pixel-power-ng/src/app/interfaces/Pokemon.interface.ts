@@ -43,6 +43,9 @@ export interface Sprites {
   gmax: string | null;
 }
 
+/**
+ * Pokemon move
+ */
 export interface Move {
   name: string;
   accuracy: number;
