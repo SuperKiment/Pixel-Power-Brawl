@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.epsi.epsi_pixel_power_brawl.dto.UserDto;
+import com.epsi.epsi_pixel_power_brawl.dto.RegisterDto;
 import com.epsi.epsi_pixel_power_brawl.model.Utilisateur;
 import com.epsi.epsi_pixel_power_brawl.service.UserService;
 
@@ -29,7 +29,7 @@ public class RegistrationController {
 
 	@PostMapping("/user/registration")
 	@ResponseBody
-	public String registerUserAccount(@RequestBody UserDto userDto) {
+	public String registerUserAccount(@RequestBody RegisterDto userDto) {
 	    
 	    try {
 	        Utilisateur registered = userService.registerNewUserAccount(userDto);

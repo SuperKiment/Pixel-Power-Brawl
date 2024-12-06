@@ -9,8 +9,3 @@ spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation= true
 spring.jpa.properties.hibernate.dialect= org.hibernate.dialect.PostgreSQLDialect
-
-#https://www.devglan.com/online-tools/hmac-sha256-online -------> hachage
-#https://www.base64encode.org/ --------> encodage Base64
-
-jwt.secret=base-64-encoded-key

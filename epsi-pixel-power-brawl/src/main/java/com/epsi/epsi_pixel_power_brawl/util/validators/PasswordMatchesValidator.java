@@ -1,6 +1,6 @@
 package com.epsi.epsi_pixel_power_brawl.util.validators;
 
-import com.epsi.epsi_pixel_power_brawl.dto.UserDto;
+import com.epsi.epsi_pixel_power_brawl.dto.RegisterDto;
 import com.epsi.epsi_pixel_power_brawl.util.annotations.CustomAnnotations.PasswordMatches;
 
 import jakarta.validation.ConstraintValidator;
@@ -15,7 +15,7 @@ public class PasswordMatchesValidator
 	    
 	    @Override
 	    public boolean isValid(Object obj, ConstraintValidatorContext context){
-	        UserDto user = (UserDto) obj;
+	        RegisterDto user = (RegisterDto) obj;
 	        return user.getPassword().equals(user.getMatchingPassword());
 	    }
 }

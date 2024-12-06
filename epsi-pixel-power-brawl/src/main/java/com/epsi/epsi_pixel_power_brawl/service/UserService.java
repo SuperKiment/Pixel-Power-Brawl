@@ -10,7 +10,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.epsi.epsi_pixel_power_brawl.dto.UserDto;
+import com.epsi.epsi_pixel_power_brawl.dto.RegisterDto;
 import com.epsi.epsi_pixel_power_brawl.model.Utilisateur;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,7 +27,7 @@ public class UserService implements IUserService {
     private PasswordEncoder passwordEncoder;
     
     @Override
-    public Utilisateur registerNewUserAccount(UserDto userDto) throws Exception {
+    public Utilisateur registerNewUserAccount(RegisterDto userDto) throws Exception {
         if (usernameExists(userDto.getUsername())) {
             throw new Exception("There is an account with that username: "
               + userDto.getUsername());
@@ -41,6 +41,22 @@ public class UserService implements IUserService {
         return repository.save(user);
     }
 
+    
+    
+    
+    @Override
+    public boolean authenticate(String username, String password) {
+        Utilisateur user = repository.findByUsername(username);
+    	
+    	if (user != null) {
+    		if (passwordEncoder.matches(password, user.getPassword())) {
+    			return true;
+    		}
+        }
+        return false;
+
+    }
+    
     private boolean usernameExists(String username) {
         return repository.findByUsername(username) != null;
     }
