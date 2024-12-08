@@ -4,6 +4,7 @@ import { KimentComponent } from './kiment/kiment.component';
 import { TestApiComponent } from './test-api/test-api.component';
 import { TeamChoosingComponent } from './team-choosing/team-choosing.component';
 import { MatchmakingComponent } from './matchmaking/matchmaking.component';
+import { LoginRegisterComponent } from './login-register/login-register.component';
 
 export const routes: Routes = [
   { path: 'app-formulaire', component: FormulaireComponent },
@@ -11,4 +12,5 @@ export const routes: Routes = [
   { path: 'app-test-api', component: TestApiComponent },
   { path: 'team-choosing', component: TeamChoosingComponent },
   { path: 'matchmaking', component: MatchmakingComponent },
+  { path: 'login', component: LoginRegisterComponent },
 ];

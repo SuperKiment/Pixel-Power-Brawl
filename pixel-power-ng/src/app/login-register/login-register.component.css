@@ -1,0 +1,33 @@
+.auth-container {
+  max-width: 400px;
+  margin: auto;
+  padding: 1em;
+  border-radius: 8px;
+}
+label {
+  display: block;
+  margin-bottom: 0.5em;
+}
+input {
+  width: 100%;
+  padding: 0.5em;
+  margin-bottom: 1em;
+  border: 3px solid #43aa8b;
+  border-radius: 4px;
+}
+small {
+  color: #ff6f59;
+}
+button {
+  margin: 10px;
+  margin-top: 1em;
+  padding: 0.5em 1em;
+  border: none;
+  background-color: #43aa8b;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button[disabled] {
+  background-color: #ccc;
+}
