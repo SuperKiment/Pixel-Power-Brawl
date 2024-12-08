@@ -18,7 +18,7 @@ export interface BattlePokemon {
 }
 
 export interface PokemonTeam {
-  pokemons: Pokemon[];
+  pokemons: (Pokemon | null)[];
 }
 
 export enum GameStateEnum {

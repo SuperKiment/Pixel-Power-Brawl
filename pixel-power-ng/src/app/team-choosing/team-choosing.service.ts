@@ -12,7 +12,7 @@ export class TeamChoosingService {
 
   constructor(private httpClient: HttpClient) {}
 
-  public getAllPokemons(): Observable<any> {
+  public fetchAllPokemons(): Observable<any> {
     return this.httpClient.get<any>(this.urlPokemonAPI);
   }
 

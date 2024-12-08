@@ -11,6 +11,7 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { DetailPokemonComponent } from '../detail-pokemon/detail-pokemon.component';
+import { PokemonTeam } from '../interfaces/Battle.interface';
 
 @Component({
   selector: 'app-team-choosing',
@@ -64,7 +65,7 @@ export class TeamChoosingComponent {
 
   updateListe() {
     this.allPokemons = [];
-    this.teamChoosingService.getAllPokemons().subscribe((data: any) => {
+    this.teamChoosingService.fetchAllPokemons().subscribe((data: any) => {
       for (let pokemon of data) {
         this.allPokemons.push({
           category: pokemon.category,
@@ -89,6 +90,16 @@ export class TeamChoosingComponent {
 
   onSubmitTeam() {
     console.log(this.selectForm.value);
+    let pokemonTeam: PokemonTeam = { pokemons: [] };
+
+    for (let i = 0; i < 6; i++) {
+      pokemonTeam.pokemons.push(
+        this.allPokemons[this.selectForm.get('memberSelected' + i)?.value] ||
+          null
+      );
+    }
+
+    this.teamChoosingService.setPokemonTeam(pokemonTeam);
   }
 
   getPokemonMember(memberIndex: number): Pokemon | null {
