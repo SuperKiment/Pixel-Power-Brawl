@@ -24,6 +24,9 @@ export class LoginRegisterComponent {
   isLoginMode = true;
   authForm: FormGroup;
 
+  errorMessage: string = '';
+  successMessage: string = '';
+
   constructor(
     private httpClient: HttpClient,
     private apiCall: ApiCallService,
@@ -36,7 +39,7 @@ export class LoginRegisterComponent {
     this.authForm = this.fb.group({
       username: ['', []],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: [''],
+      matchingPassword: [''],
     });
 
     this.toggleConfirmPassword();
@@ -49,10 +52,10 @@ export class LoginRegisterComponent {
 
   toggleConfirmPassword() {
     if (this.isLoginMode) {
-      this.authForm.removeControl('confirmPassword');
+      this.authForm.removeControl('matchingPassword');
     } else {
       this.authForm.addControl(
-        'confirmPassword',
+        'matchingPassword',
         this.fb.control('', [
           Validators.required,
           this.matchPassword.bind(this),
@@ -72,20 +75,33 @@ export class LoginRegisterComponent {
 
     if (this.isLoginMode) {
       console.log('Logging in with:', this.authForm.value);
-      this.apiCall.login(this.authForm.value).subscribe((data) => {
-        console.log(data);
-        if (data.status == 200) {
-          // localStorage.setItem('token', data.body);
+      this.apiCall.login(this.authForm.value).subscribe({
+        next: (data) => {
+          if (!data.token) return;
+
+          localStorage.setItem('token', data.token);
           localStorage.setItem(
             'username',
             this.authForm.get('username')?.value
           );
+
           this.router.navigate(['/team-choosing']);
-        } else {
-        }
+        },
+        error: (error) => (this.errorMessage = error),
       });
     } else {
       console.log('Registering with:', this.authForm.value);
+
+      this.apiCall.register(this.authForm.value).subscribe({
+        next: (data) => {
+          if (!data.response) return;
+
+          this.successMessage = "Utilisateur créé avec succès !"
+
+          this.router.navigate(['/login']);
+        },
+        error: (error) => (this.errorMessage = error),
+      });
     }
   }
 }

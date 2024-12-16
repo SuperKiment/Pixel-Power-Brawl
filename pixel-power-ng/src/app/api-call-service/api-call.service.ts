@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpResponse,
+} from '@angular/common/http';
+import { catchError, Observable, throwError } from 'rxjs';
 import { API_URL } from '../environment';
 
 interface LoginBody {
@@ -20,15 +24,23 @@ interface RegisterBody {
 export class ApiCallService {
   constructor(private httpClient: HttpClient) {}
 
-  public login(body: LoginBody): Observable<HttpResponse<Object>> {
-    return this.httpClient.post(API_URL + 'user/login', body, {
-      observe: 'response',
-    });
+  public login(body: LoginBody): Observable<{ token: string }> {
+    return this.httpClient
+      .post<{ token: string }>(API_URL + 'user/login', body, {
+        responseType: 'json',
+      })
+      .pipe(catchError(this.handleError));
   }
 
-  public register(body: RegisterBody): Observable<string> {
-    return this.httpClient.post(API_URL + 'user/registration', body, {
-      responseType: 'text',
-    });
+  public register(body: RegisterBody): Observable<{ response: string }> {
+    return this.httpClient
+      .post<{ response: string }>(API_URL + 'user/registration', body, {
+        responseType: 'json',
+      })
+      .pipe(catchError(this.handleError));
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    return throwError(() => new Error(error.error.error || "Erreur inconnue !"));
   }
 }
