@@ -7,11 +7,14 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ApiCallService } from '../api-call-service/api-call.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'login-register',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
+  providers: [ApiCallService],
   templateUrl: './login-register.component.html',
   styleUrl: './login-register.component.css',
 })
@@ -21,9 +24,17 @@ export class LoginRegisterComponent {
   isLoginMode = true;
   authForm: FormGroup;
 
-  constructor(private httpClient: HttpClient) {
+  constructor(
+    private httpClient: HttpClient,
+    private apiCall: ApiCallService,
+    private router: Router
+  ) {
+    if (localStorage.getItem('username')) {
+      router.navigate(['/profil']);
+    }
+
     this.authForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      username: ['', []],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: [''],
     });
@@ -61,6 +72,18 @@ export class LoginRegisterComponent {
 
     if (this.isLoginMode) {
       console.log('Logging in with:', this.authForm.value);
+      this.apiCall.login(this.authForm.value).subscribe((data) => {
+        console.log(data);
+        if (data.status == 200) {
+          // localStorage.setItem('token', data.body);
+          localStorage.setItem(
+            'username',
+            this.authForm.get('username')?.value
+          );
+          this.router.navigate(['/team-choosing']);
+        } else {
+        }
+      });
     } else {
       console.log('Registering with:', this.authForm.value);
     }
