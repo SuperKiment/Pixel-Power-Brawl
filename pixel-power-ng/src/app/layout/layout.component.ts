@@ -7,8 +7,13 @@ import { MatButtonModule } from '@angular/material/button';
   standalone: true,
   imports: [RouterOutlet, MatButtonModule],
   templateUrl: './layout.component.html',
-  styleUrl: './layout.component.css'
+  styleUrl: './layout.component.css',
 })
 export class LayoutComponent {
+  username: string = '';
 
+  constructor() {
+    const stockedName = localStorage.getItem('username');
+    if (stockedName) this.username = stockedName;
+  }
 }

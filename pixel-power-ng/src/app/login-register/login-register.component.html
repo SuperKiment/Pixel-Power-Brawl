@@ -2,12 +2,12 @@
   <h2>{{ isLoginMode ? "Login" : "Register" }}</h2>
   <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
     <div>
-      <label for="email">Email</label>
-      <input id="email" formControlName="email" type="email" />
+      <label for="username">Username</label>
+      <input id="username" formControlName="username" type="username" />
       <div
-        *ngIf="authForm.get('email')?.invalid && authForm.get('email')?.touched"
+        *ngIf="authForm.get('username')?.invalid && authForm.get('username')?.touched"
       >
-        <small>Email is required and must be valid.</small>
+        <small>Username is required and must be valid.</small>
       </div>
     </div>
 
