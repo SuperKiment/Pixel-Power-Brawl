@@ -1,7 +1,12 @@
 package com.epsi.epsi_pixel_power_brawl.controller;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,10 +28,16 @@ public class LoginController {
 
     @PostMapping("/user/login")
 	@ResponseBody
-	public String login(@RequestBody LoginDto loginDto) {
-	    if (userService.authenticate(loginDto.getUsername(), loginDto.getPassword())) {
-	        return jwtUtil.generateToken(loginDto.getUsername());
-	    }
-	    throw new RuntimeException("Login failed");
-	}
+	public ResponseEntity<Map<String, String>> login(@RequestBody LoginDto loginDto) {
+        if (userService.authenticate(loginDto.getUsername(), loginDto.getPassword())) {
+            String jwtToken = jwtUtil.generateToken(loginDto.getUsername());
+            Map<String, String> response = new HashMap<>();
+            response.put("token", jwtToken);
+            return ResponseEntity.ok(response);
+        }
+        
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Invalid credentials");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
 }

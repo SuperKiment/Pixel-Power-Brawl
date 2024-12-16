@@ -27,6 +27,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.epsi.epsi_pixel_power_brawl.service.MyUserDetailsService;
 import com.epsi.epsi_pixel_power_brawl.service.UserService;
+import com.epsi.epsi_pixel_power_brawl.util.jwt.JwtAuthenticationEntryPoint;
+import com.epsi.epsi_pixel_power_brawl.util.jwt.JwtAuthenticationFilter;
+import com.epsi.epsi_pixel_power_brawl.util.jwt.JwtAuthorizationFilter;
 import com.epsi.epsi_pixel_power_brawl.util.jwt.JwtUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,7 +37,13 @@ import jakarta.servlet.http.HttpServletRequest;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
+	
+	@Autowired
+	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	
+	@Autowired
+    private JwtAuthorizationFilter jwtAuthorizationFilter;
+    
     @Autowired
 	private JwtUtil jwtUtil;
     	
@@ -60,7 +69,8 @@ public class SecurityConfig {
     				.requestMatchers("/user/login").permitAll()
     				.anyRequest().authenticated()
     		)
-            .addFilterBefore(new JwtAuthenticationFilter(authenticationManager, jwtUtil), UsernamePasswordAuthenticationFilter.class)
+    		.exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+            .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
             .formLogin().disable();
         return http.build();
     }

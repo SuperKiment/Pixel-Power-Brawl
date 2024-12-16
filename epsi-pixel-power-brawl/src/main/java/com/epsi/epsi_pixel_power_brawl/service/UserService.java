@@ -32,7 +32,6 @@ public class UserService implements IUserService {
             throw new Exception("There is an account with that username: "
               + userDto.getUsername());
         }
-
         Utilisateur user = new Utilisateur();
         user.setUsername(userDto.getUsername());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));

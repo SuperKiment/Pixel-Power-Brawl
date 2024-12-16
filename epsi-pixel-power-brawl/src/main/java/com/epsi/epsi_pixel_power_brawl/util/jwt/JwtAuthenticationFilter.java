@@ -1,6 +1,5 @@
-package com.epsi.epsi_pixel_power_brawl.config;
+package com.epsi.epsi_pixel_power_brawl.util.jwt;
 
-import com.epsi.epsi_pixel_power_brawl.util.jwt.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
