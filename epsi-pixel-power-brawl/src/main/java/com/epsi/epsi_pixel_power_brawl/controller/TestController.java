@@ -22,7 +22,7 @@ public class TestController {
 	
     ModelAndView mav = new ModelAndView(); 
 
-	@PostMapping("/test/hello")
+	@GetMapping("/test/hello")
 	@ResponseBody
 	public String registerUserAccount(@RequestBody TestDto testDto) {
 	    

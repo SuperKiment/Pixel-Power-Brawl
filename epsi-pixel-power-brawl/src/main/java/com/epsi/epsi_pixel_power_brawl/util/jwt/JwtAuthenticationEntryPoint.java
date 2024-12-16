@@ -17,7 +17,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     	response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getWriter().write("{\"error\": \"unauthorized: invalid token or missing credentials\"," +
-       								"exception\": \"" + authException.getMessage() + "\"}");
+       								"\"exception\": \"" + authException.getMessage() + "\"}");
         
     }
 }

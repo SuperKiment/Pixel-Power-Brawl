@@ -4,6 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,6 +14,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.epsi.epsi_pixel_power_brawl.config.PublicRoutes;
 import com.epsi.epsi_pixel_power_brawl.util.jwt.JwtUtil;
 
 import java.io.Console;
@@ -20,9 +22,15 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
-
-    private final JwtUtil jwtUtil;
-    private final UserDetailsService userDetailsService;
+	
+	@Autowired
+	PublicRoutes publicRoutes;
+	
+	@Autowired
+    private JwtUtil jwtUtil;
+	
+	@Autowired
+    private UserDetailsService userDetailsService;
 
     public JwtAuthorizationFilter(JwtUtil jwtUtil, UserDetailsService userDetailsService) {
         this.jwtUtil = jwtUtil;
@@ -34,10 +42,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
     	
     	String path = request.getServletPath();
-    	System.out.println(path);
-    	if (path.equals("/user/login") || path.equals("/user/registration")) {
+    	if (publicRoutes.getPublicRoutes().contains(path)) {
             filterChain.doFilter(request, response);
-        	System.out.println("we good bro");
             return;
         }
 

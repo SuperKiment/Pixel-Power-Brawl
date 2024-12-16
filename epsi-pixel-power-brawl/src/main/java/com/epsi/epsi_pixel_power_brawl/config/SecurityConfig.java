@@ -39,6 +39,9 @@ import jakarta.servlet.http.HttpServletRequest;
 public class SecurityConfig {
 	
 	@Autowired
+	private PublicRoutes publicRoutes;
+	
+	@Autowired
 	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	
 	@Autowired
@@ -65,8 +68,7 @@ public class SecurityConfig {
     		.authorizeHttpRequests(auth -> auth
     				.requestMatchers("/admin/**").hasRole("ADMIN")
     				.requestMatchers("/login/**").permitAll()
-    				.requestMatchers("/user/registration").permitAll()
-    				.requestMatchers("/user/login").permitAll()
+    				.requestMatchers(publicRoutes.getPublicRoutesAsArray()).permitAll()
     				.anyRequest().authenticated()
     		)
     		.exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
