@@ -1,0 +1,54 @@
+<div class="auth-container">
+  <h2>{{ isLoginMode ? "Connection" : "Inscription" }}</h2>
+  <small>{{ errorMessage }}</small>
+  <small style="color: greenyellow;">{{ successMessage }}</small>
+  <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="username">Pseudo</label>
+      <input id="username" formControlName="username" type="username" />
+      <div
+        *ngIf="
+          authForm.get('username')?.invalid && authForm.get('username')?.touched
+        "
+      >
+        <small>Pseudo est requis et doit être valide.</small>
+      </div>
+    </div>
+
+    <div>
+      <label for="password">Mot de passe</label>
+      <input id="password" formControlName="password" type="password" />
+      <div
+        *ngIf="
+          authForm.get('password')?.invalid && authForm.get('password')?.touched
+        "
+      >
+        <small>Mot de passe est requis (Min 6 caractères)</small>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoginMode">
+      <label for="matchingPassword">Confirmer le mot de passe</label>
+      <input
+        id="matchingPassword"
+        formControlName="matchingPassword"
+        type="password"
+      />
+      <div
+        *ngIf="
+          authForm.get('matchingPassword')?.invalid &&
+          authForm.get('matchingPassword')?.touched
+        "
+      >
+        <small>Les mots de passe doivent être les mêmes.</small>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="authForm.invalid">
+      {{ isLoginMode ? "Se connecter" : "S'inscrire" }}
+    </button>
+    <button type="button" (click)="toggleMode()">
+      {{ isLoginMode ? "S'inscrire" : "Se connecter" }}
+    </button>
+  </form>
+</div>
