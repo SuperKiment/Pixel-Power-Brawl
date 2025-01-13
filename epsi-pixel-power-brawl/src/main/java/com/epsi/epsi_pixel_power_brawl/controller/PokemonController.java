@@ -53,7 +53,7 @@ public class PokemonController {
 	@GetMapping("/pokemons")
 	@ResponseBody
 public ResponseEntity<List<PokemonDto>> fetchAllPokemons() {
-		
+		//TODO : Ne pas oublier de revoir la structure (mettre un service, etc...) 
 		// Get raw JSON response
 		String jsonResponse = webClient.get()
 	            .uri("https://tyradex.vercel.app/api/v1/pokemon")
