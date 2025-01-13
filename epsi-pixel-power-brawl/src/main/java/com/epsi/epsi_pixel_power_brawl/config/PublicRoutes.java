@@ -12,6 +12,7 @@ import java.util.List;
 @Setter
 @Component
 public class PublicRoutes {
+	//TODO : Comment je peux l'améliorer Clément a la réponse
     private List<String> routes = new ArrayList<String>();
     
     public PublicRoutes() {
