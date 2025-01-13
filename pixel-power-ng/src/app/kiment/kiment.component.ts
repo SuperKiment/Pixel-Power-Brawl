@@ -1,14 +1,12 @@
 import { Component } from '@angular/core';
 import { Article, ServiceKimentService } from './service-kiment.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms'; // <== Import de FormsModule
-import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-kiment',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
-  providers: [ServiceKimentService],
+  imports: [CommonModule, FormsModule],
   templateUrl: './kiment.component.html',
   styleUrl: './kiment.component.css',
 })

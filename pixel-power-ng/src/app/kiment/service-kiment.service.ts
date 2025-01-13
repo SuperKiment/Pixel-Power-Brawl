@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import fetchAuth from '../utils/fetch-auth';
 
 export interface Article {
   nom: string;
@@ -19,14 +20,14 @@ export class ServiceKimentService {
   constructor(private httpClient: HttpClient) {}
 
   getArticles(): Observable<Article[]> {
-    return this.httpClient.get<Article[]>(this.urlAPI + '/api/articles');
+    return this.httpClient.get<Article[]>(this.urlAPI + '/api/articles', fetchAuth());
   }
 
   removeArticle(index: number): Observable<void> {
     const deleteURL = this.urlAPI + '/api/articles/' + index;
     console.log(deleteURL);
 
-    return this.httpClient.delete<void>(deleteURL);
+    return this.httpClient.delete<void>(deleteURL, fetchAuth());
   }
 
   addArticle(article: Article): Observable<Article> {
@@ -40,7 +41,7 @@ export class ServiceKimentService {
 
     console.log('sent : ' + content);
 
-    return this.httpClient.post<Article>(addURL, content);
+    return this.httpClient.post<Article>(addURL, content, fetchAuth());
   }
 
   getPrixTotal(): number {

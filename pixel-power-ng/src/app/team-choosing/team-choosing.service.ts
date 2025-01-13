@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PokemonTeam } from '../interfaces/Battle.interface';
+import fetchAuth from '../utils/fetch-auth';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ export class TeamChoosingService {
   constructor(private httpClient: HttpClient) {}
 
   public fetchAllPokemons(): Observable<any> {
-    return this.httpClient.get<any>(this.urlPokemonAPI);
+    return this.httpClient.get(this.urlPokemonAPI, fetchAuth());
   }
 
   setPokemonTeam(team: PokemonTeam) {
