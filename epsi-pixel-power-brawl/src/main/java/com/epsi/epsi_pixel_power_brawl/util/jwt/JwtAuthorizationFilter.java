@@ -24,7 +24,7 @@ import java.io.IOException;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 	
 	@Autowired
-	PublicRoutes publicRoutes;
+	private PublicRoutes publicRoutes;
 	
 	@Autowired
     private JwtUtil jwtUtil;

@@ -26,13 +26,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.epsi.epsi_pixel_power_brawl.service.MyUserDetailsService;
-import com.epsi.epsi_pixel_power_brawl.service.UserService;
 import com.epsi.epsi_pixel_power_brawl.util.jwt.JwtAuthenticationEntryPoint;
-import com.epsi.epsi_pixel_power_brawl.util.jwt.JwtAuthenticationFilter;
 import com.epsi.epsi_pixel_power_brawl.util.jwt.JwtAuthorizationFilter;
 import com.epsi.epsi_pixel_power_brawl.util.jwt.JwtUtil;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 @Configuration
 @EnableWebSecurity
@@ -63,8 +59,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     	http
-    		.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(AbstractHttpConfigurer::disable).csrf(AbstractHttpConfigurer::disable)
+			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+    		.csrf(AbstractHttpConfigurer::disable)
     		.authorizeHttpRequests(auth -> auth
     				.requestMatchers("/admin/**").hasRole("ADMIN")
     				.requestMatchers("/login/**").permitAll()
@@ -84,7 +80,7 @@ public class SecurityConfig {
 		configuration.setAllowedOrigins(List.of("http://localhost:4200"));
 		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		configuration.setAllowedHeaders(List.of("*"));
-		configuration.setAllowCredentials(true);
+		configuration.setAllowCredentials(false);
 		
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
