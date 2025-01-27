@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { WebSocketMessage } from '../interfaces/WebSocket.interface';
 
@@ -7,36 +7,53 @@ import { WebSocketMessage } from '../interfaces/WebSocket.interface';
   providedIn: 'root',
 })
 export class WebSocketService {
-  constructor(private socket$: WebSocketSubject<WebSocketMessage>) {}
+  private socket$: WebSocketSubject<WebSocketMessage> | null = null;
+
+  constructor() {}
 
   connect(url: string): void {
-    this.socket$ = webSocket({
-      url: 'ws://localhost:8081/ws-pokemon-matchmaking',
-      openObserver: {
-        next: () => {
-          console.log('Connection established');
+    if (!this.socket$ || this.socket$.closed) {
+      this.socket$ = webSocket<WebSocketMessage>({
+        url,
+        openObserver: {
+          next: () => console.log('WebSocket connection established'),
         },
-      },
-    });
+        closeObserver: {
+          next: () => console.log('WebSocket connection closed'),
+        },
+        // errorObserver: {
+        //   next: (err) => console.error('WebSocket connection error:', err),
+        // },
+      });
+    } else {
+      console.warn('WebSocket is already connected.');
+    }
   }
 
   sendMessage(message: WebSocketMessage): void {
     if (this.socket$) {
+      console.log('Sending message:', message);
       this.socket$.next(message);
+    } else {
+      console.error('WebSocket is not connected. Call `connect` first.');
     }
   }
 
   getMessages(): Observable<WebSocketMessage> {
-    if (!this.socket$) {
-      throw new Error('WebSocket non connecté. Appelez `connect` en premier.');
+    if (this.socket$) {
+      return this.socket$.asObservable();
+    } else {
+      throw new Error('WebSocket is not connected. Call `connect` first.');
     }
-    return this.socket$.asObservable();
   }
 
-  // Fermeture de la connexion
+  // Close the connection
   close(): void {
     if (this.socket$) {
       this.socket$.complete();
+      this.socket$ = null; // Reset the socket reference after closing
+    } else {
+      console.warn('WebSocket is not connected or already closed.');
     }
   }
 }
