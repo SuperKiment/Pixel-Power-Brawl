@@ -1,28 +1,43 @@
-import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { WebSocketService } from './websocket-matchmaking.service';
-import { WebSocketMessage } from '../interfaces/WebSocket.interface';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'matchmaking',
   standalone: true,
-  imports: [HttpClientModule],
+  selector: 'app-websocket',
   templateUrl: './matchmaking.component.html',
-  providers: [WebSocketService],
-  styleUrl: './matchmaking.component.css',
+  imports: [CommonModule],
 })
-export class MatchmakingComponent {
-  constructor(
-    private http: HttpClient,
-    private wsMatchmaking: WebSocketService
-  ) {}
+export class MatchmakingComponent implements OnInit {
+  public isConnected = false;
 
-  connectToServer() {
-    this.wsMatchmaking.connect('ws://192.168.1.17:8081/ws-pokemon-matchmaking');
+  constructor(private webSocketService: WebSocketService) {
+    this.updateIsConnected();
   }
 
-  sendMessage(message: string="a") {
-    const wsMessage: WebSocketMessage = { type: 'MESSAGE', content: "message" };
-    this.wsMatchmaking.sendMessage(wsMessage);
+  ngOnInit(): void {}
+
+  connect(): void {
+    this.webSocketService
+      .connect('ws://192.168.1.17:8081/ws-pokemon-matchmaking')
+      .subscribe((event: Event) => {
+        this.updateIsConnected();
+      });
+  }
+
+  sendMessage(): void {
+    this.webSocketService.sendMessage('Hello Server!');
+    this.updateIsConnected();
+  }
+
+  disconnect(): void {
+    this.webSocketService.disconnect();
+    this.updateIsConnected();
+  }
+
+  updateIsConnected(): void {
+    this.isConnected = this.webSocketService.isConnected();
+
+    console.log(this.isConnected);
   }
 }

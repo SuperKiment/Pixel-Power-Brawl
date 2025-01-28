@@ -1,7 +1,8 @@
 <div>
   <h2>Matchmaking</h2>
-
-  <button class="button-style">Envoi message</button>
-  <button type="button" (click)="connectToServer()">Connect WS</button>
-  <button type="button" (click)='sendMessage()'>Envoyer un message</button>
+  <div *ngIf="!isConnected">
+    <button (click)="connect()">Connect</button>
+  </div>
+  <button (click)="sendMessage()">Send Message</button>
+  <button (click)="disconnect()">Disconnect</button>
 </div>
