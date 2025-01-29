@@ -18,6 +18,7 @@ public class PublicRoutes {
     public PublicRoutes() {
     	this.routes.add("/user/login");
         this.routes.add("/user/registration");
+        this.routes.add("/ws-pokemon-matchmaking");
     }
     
     public List<String> getPublicRoutes() {
