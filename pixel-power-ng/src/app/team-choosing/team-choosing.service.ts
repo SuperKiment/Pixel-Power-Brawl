@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PokemonTeam } from '../interfaces/Battle.interface';
+import {
+  PokemonTeam,
+  SimplifiedPokemonTeam,
+} from '../interfaces/Battle.interface';
 import fetchAuth from '../utils/fetch-auth';
 
 @Injectable({
@@ -9,7 +12,7 @@ import fetchAuth from '../utils/fetch-auth';
 })
 export class TeamChoosingService {
   private urlPokemonAPI = 'https://tyradex.vercel.app/api/v1/pokemon';
-  pokemonTeam: PokemonTeam | null = null;
+  private pokemonTeam: PokemonTeam | null = null;
 
   constructor(private httpClient: HttpClient) {}
 
@@ -19,5 +22,21 @@ export class TeamChoosingService {
 
   setPokemonTeam(team: PokemonTeam) {
     this.pokemonTeam = team;
+  }
+
+  getPokemonTeam(): PokemonTeam | null {
+    return this.pokemonTeam;
+  }
+
+  getSimplifiedPokemonTeam(): SimplifiedPokemonTeam | null {
+    if (this.pokemonTeam) {
+      return {
+        pokemons: this.pokemonTeam.pokemons.map((member) => ({
+          pokedexID: member?.pokedexID || 1,
+          isShiny: member?.isShiny || false,
+        })),
+      };
+    }
+    return null;
   }
 }

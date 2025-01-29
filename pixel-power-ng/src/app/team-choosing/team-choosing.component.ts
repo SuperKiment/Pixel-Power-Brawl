@@ -12,6 +12,7 @@ import {
 } from '@angular/forms';
 import { DetailPokemonComponent } from '../detail-pokemon/detail-pokemon.component';
 import { PokemonTeam } from '../interfaces/Battle.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-team-choosing',
@@ -23,7 +24,7 @@ import { PokemonTeam } from '../interfaces/Battle.interface';
     ReactiveFormsModule,
     DetailPokemonComponent,
   ],
-  providers: [TeamChoosingService],
+  providers: [],
   templateUrl: './team-choosing.component.html',
   styleUrl: './team-choosing.component.css',
 })
@@ -35,7 +36,8 @@ export class TeamChoosingComponent {
 
   constructor(
     private teamChoosingService: TeamChoosingService,
-    fb: FormBuilder
+    fb: FormBuilder,
+    private router: Router
   ) {
     this.selectForm = fb.group({
       memberSelected0: [
@@ -89,7 +91,7 @@ export class TeamChoosingComponent {
   }
 
   onSubmitTeam() {
-    console.log(this.selectForm.value);
+    // console.log(this.selectForm.value);
     let pokemonTeam: PokemonTeam = { pokemons: [] };
 
     for (let i = 0; i < 6; i++) {
@@ -100,6 +102,8 @@ export class TeamChoosingComponent {
     }
 
     this.teamChoosingService.setPokemonTeam(pokemonTeam);
+    console.log(this.teamChoosingService.getPokemonTeam());
+    this.router.navigate(['/matchmaking']);
   }
 
   getPokemonMember(memberIndex: number): Pokemon | null {

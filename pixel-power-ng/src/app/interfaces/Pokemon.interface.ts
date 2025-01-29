@@ -67,3 +67,11 @@ export interface Pokemon {
   stats: Stats;
   isShiny: boolean;
 }
+
+/**
+ * Simplified Pokemon interface
+ */
+export interface SimplifiedPokemon {
+  pokedexID: number;
+  isShiny: boolean;
+}
