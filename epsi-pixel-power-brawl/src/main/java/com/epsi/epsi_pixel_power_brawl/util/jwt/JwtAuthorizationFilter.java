@@ -43,6 +43,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     	
     	String path = request.getServletPath();
     	if (publicRoutes.getPublicRoutes().contains(path)) {
+
             filterChain.doFilter(request, response);
             return;
         }

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {
   HttpClient,
   HttpErrorResponse,
-  HttpResponse,
 } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { API_URL } from '../environment';

@@ -1,4 +1,4 @@
-import { Move, Pokemon } from './Pokemon.interface';
+import { Move, Pokemon, SimplifiedPokemon } from './Pokemon.interface';
 
 export enum Status {
   POISON = 'Empoisonné',
@@ -19,6 +19,10 @@ export interface BattlePokemon {
 
 export interface PokemonTeam {
   pokemons: (Pokemon | null)[];
+}
+
+export interface SimplifiedPokemonTeam {
+  pokemons: (SimplifiedPokemon | null)[];
 }
 
 export enum GameStateEnum {

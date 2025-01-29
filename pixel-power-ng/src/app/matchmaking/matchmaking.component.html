@@ -1,3 +1,9 @@
 <div>
   <h2>Matchmaking</h2>
+  <div *ngIf="!isConnected">
+    <button (click)="connect()">Reconnecter au serveur</button>
+  </div>
+  <button (click)="sendMessage()">Test envoi message</button>
+  <button (click)="disconnect()">Déconnection du serveur</button>
+  <button (click)="sendTeam()">Envoyer équipe au serveur</button>
 </div>

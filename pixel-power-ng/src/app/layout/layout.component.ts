@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { HttpClientModule } from '@angular/common/http';
+import { JwtInterceptor } from '../interceptors/jwt.interceptor';
 
 @Component({
   selector: 'layout',
   standalone: true,
-  imports: [RouterOutlet, MatButtonModule],
+  imports: [RouterOutlet, MatButtonModule, HttpClientModule],
+  providers: [],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.css',
 })
