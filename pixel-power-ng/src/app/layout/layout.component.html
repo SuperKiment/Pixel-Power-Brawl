@@ -2,15 +2,8 @@
   <div class="navbar-logo">
     <img src="assets/img/logo-128.png" alt="" class="logo" />
     <div class="navbar-container">
-      <a href="/app-kiment"><button class="button-style">App Kiment</button></a>
-      <a href="/app-formulaire"
-        ><button class="button-style">App Formulaire</button></a
-      >
-      <a href="/team-choosing"
+      <a href="/team-choosing" *ngIf="isUserConnected()"
         ><button class="button-style">Team Choosing</button></a
-      >
-      <a href="/matchmaking"
-        ><button class="button-style">Matchmaking</button></a
       >
       <a href="/login"
         ><button class="button-style">{{ username || "Login" }}</button></a

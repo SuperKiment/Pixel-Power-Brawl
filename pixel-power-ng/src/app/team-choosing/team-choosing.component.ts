@@ -5,7 +5,6 @@ import { TeamChoosingService } from './team-choosing.service';
 import { Pokemon, Type } from '../interfaces/Pokemon.interface';
 import {
   FormsModule,
-  // NgForm,
   ReactiveFormsModule,
   FormGroup,
   FormBuilder,
@@ -71,8 +70,8 @@ export class TeamChoosingComponent {
       for (let pokemon of data) {
         this.allPokemons.push({
           category: pokemon.category,
-          name: pokemon.name.fr,
-          pokedexID: pokemon.pokedex_id,
+          name: pokemon.name,
+          pokedexID: pokemon.pokedexId,
           resistances: pokemon.resistances,
           sprites: pokemon.sprites,
           stats: pokemon.stats,

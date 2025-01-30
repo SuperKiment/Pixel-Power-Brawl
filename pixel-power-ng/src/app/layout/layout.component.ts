@@ -2,12 +2,13 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { HttpClientModule } from '@angular/common/http';
-import { JwtInterceptor } from '../interceptors/jwt.interceptor';
+import { CommonModule } from '@angular/common';
+import { isUserConnected } from '../login-register/login-register.component';
 
 @Component({
   selector: 'layout',
   standalone: true,
-  imports: [RouterOutlet, MatButtonModule, HttpClientModule],
+  imports: [RouterOutlet, MatButtonModule, HttpClientModule, CommonModule],
   providers: [],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.css',
@@ -18,5 +19,9 @@ export class LayoutComponent {
   constructor() {
     const stockedName = localStorage.getItem('username');
     if (stockedName) this.username = stockedName;
+  }
+
+  isUserConnected(): boolean {
+    return isUserConnected();
   }
 }

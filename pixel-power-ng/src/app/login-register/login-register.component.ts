@@ -96,7 +96,7 @@ export class LoginRegisterComponent {
         next: (data) => {
           if (!data.response) return;
 
-          this.successMessage = "Utilisateur créé avec succès !"
+          this.successMessage = 'Utilisateur créé avec succès !';
 
           this.router.navigate(['/login']);
         },
@@ -104,4 +104,8 @@ export class LoginRegisterComponent {
       });
     }
   }
+}
+
+export function isUserConnected(): boolean {
+  return localStorage.getItem('username') ? true : false;
 }

@@ -3,6 +3,9 @@ import { WebSocketService } from './websocket-matchmaking.service';
 import { CommonModule } from '@angular/common';
 import { TeamChoosingService } from '../team-choosing/team-choosing.service';
 import { HttpClientModule } from '@angular/common/http';
+import { isUserConnected } from '../login-register/login-register.component';
+import { Router } from '@angular/router';
+import { SendTeamInfo } from '../interfaces/WebSocket.interface';
 
 @Component({
   standalone: true,
@@ -16,13 +19,15 @@ export class MatchmakingComponent implements OnInit {
 
   constructor(
     private webSocketService: WebSocketService,
-    private teamChoosingService: TeamChoosingService
+    private teamChoosingService: TeamChoosingService,
+    private router: Router
   ) {
     this.updateIsConnected();
+    if (!isUserConnected()) router.navigate(['/login']);
   }
 
   ngOnInit(): void {
-    this.connect();
+    if (isUserConnected()) this.connect();
   }
 
   connect(): void {
@@ -69,14 +74,26 @@ export class MatchmakingComponent implements OnInit {
 
   updateIsConnected(): void {
     this.isConnected = this.webSocketService.isConnected();
-
-    console.log(this.isConnected);
   }
 
   sendTeam(): void {
-    console.log(this.teamChoosingService.getPokemonTeam());
-    this.webSocketService.sendMessage(
-      JSON.stringify(this.teamChoosingService.getSimplifiedPokemonTeam())
-    );
+    if (!isUserConnected()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    if (this.teamChoosingService.getPokemonTeam() == null) {
+      this.router.navigate(['/team-choosing']);
+      return;
+    }
+
+    const message: SendTeamInfo = {
+      pokemonTeam:
+        this.teamChoosingService.getSimplifiedPokemonTeam() ||
+        this.teamChoosingService.getSimplifiedDefaultPokemonTeam(),
+      username: localStorage.getItem('username') as string,
+    };
+
+    this.webSocketService.sendMessage(JSON.stringify(JSON.stringify(message)));
   }
 }

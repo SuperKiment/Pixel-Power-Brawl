@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { isUserConnected } from '../login-register/login-register.component';
 
 @Component({
   selector: 'profil',
@@ -22,5 +23,9 @@ export class ProfilComponent {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
     this.router.navigate(['/login']);
+  }
+
+  isUserConnected() {
+    return isUserConnected();
   }
 }

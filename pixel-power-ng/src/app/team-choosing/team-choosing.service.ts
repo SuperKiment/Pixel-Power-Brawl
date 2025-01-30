@@ -6,15 +6,22 @@ import {
   SimplifiedPokemonTeam,
 } from '../interfaces/Battle.interface';
 import fetchAuth from '../utils/fetch-auth';
+import { API_URL } from '../environment';
+import { isUserConnected } from '../login-register/login-register.component';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TeamChoosingService {
-  private urlPokemonAPI = 'https://tyradex.vercel.app/api/v1/pokemon';
+  private urlPokemonAPI = API_URL + 'pokemons';
   private pokemonTeam: PokemonTeam | null = null;
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private router: Router) {
+    if (!isUserConnected()) {
+      router.navigate(['/login']);
+    }
+  }
 
   public fetchAllPokemons(): Observable<any> {
     return this.httpClient.get(this.urlPokemonAPI, fetchAuth());
@@ -38,5 +45,14 @@ export class TeamChoosingService {
       };
     }
     return null;
+  }
+
+  getSimplifiedDefaultPokemonTeam(): SimplifiedPokemonTeam {
+    return {
+      pokemons: Array(6).fill({
+        pokedexID: 1,
+        isShiny: true,
+      }),
+    };
   }
 }
