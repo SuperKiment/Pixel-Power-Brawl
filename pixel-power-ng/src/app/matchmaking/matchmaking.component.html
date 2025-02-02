@@ -3,4 +3,8 @@
   <div *ngIf="!isConnected">
     <button (click)="connect()">Reconnecter au serveur</button>
   </div>
+
+  <div *ngFor="let user of waitingUsers">
+    <button (click)="OnWaitingUserSelected(user)">{{ user.username }}</button>
+  </div>
 </div>

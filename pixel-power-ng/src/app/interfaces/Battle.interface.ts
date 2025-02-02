@@ -26,7 +26,10 @@ export interface SimplifiedPokemonTeam {
 }
 
 export enum GameStateEnum {
-  CHOOSING_MOVE,
+  MY_TURN,
+  OTHERS_TURN,
+  MY_WIN,
+  OTHERS_WIN,
 }
 
 export interface GameState {

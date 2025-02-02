@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { isUserConnected } from '../login-register/login-register.component';
 import { Router } from '@angular/router';
 import {
+  BattleUserInfo,
   SendTeamInfo,
   UpdateMatchmaking,
 } from '../interfaces/WebSocket.interface';
@@ -19,6 +20,7 @@ import {
 })
 export class MatchmakingComponent implements OnInit {
   public isConnected = false;
+  public waitingUsers: BattleUserInfo[] = [];
 
   constructor(
     private webSocketService: WebSocketService,
@@ -117,5 +119,16 @@ export class MatchmakingComponent implements OnInit {
 
   TraiterUpdateMatchmaking(data: UpdateMatchmaking) {
     console.log(data);
+    this.waitingUsers = data.updateWaitingUsers;
+  }
+
+  OnWaitingUserSelected(user: BattleUserInfo) {
+    console.log('Selected user:', user);
+    this.webSocketService.sendMessage(
+      JSON.stringify({
+        username: user.username,
+        type: 'WaitingUserSelected',
+      })
+    );
   }
 }
