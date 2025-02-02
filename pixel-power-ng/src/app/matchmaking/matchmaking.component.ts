@@ -5,7 +5,10 @@ import { TeamChoosingService } from '../team-choosing/team-choosing.service';
 import { HttpClientModule } from '@angular/common/http';
 import { isUserConnected } from '../login-register/login-register.component';
 import { Router } from '@angular/router';
-import { SendTeamInfo } from '../interfaces/WebSocket.interface';
+import {
+  SendTeamInfo,
+  UpdateMatchmaking,
+} from '../interfaces/WebSocket.interface';
 
 @Component({
   standalone: true,
@@ -59,7 +62,17 @@ export class MatchmakingComponent implements OnInit {
   }
 
   traiterMessage(event: MessageEvent): void {
-    console.log('Received message:', event.data);
+    const data = JSON.parse(event.data);
+
+    switch (data.type) {
+      case 'UpdateMatchmaking':
+        console.log('UpdateMatchmaking received');
+        this.TraiterUpdateMatchmaking(data as UpdateMatchmaking);
+        break;
+      case 'UpdateBattle':
+        console.log('UpdateMatchmaking received');
+        break;
+    }
   }
 
   sendMessage(): void {
@@ -92,9 +105,17 @@ export class MatchmakingComponent implements OnInit {
         this.teamChoosingService.getSimplifiedPokemonTeam() ||
         this.teamChoosingService.getSimplifiedDefaultPokemonTeam(),
       username: localStorage.getItem('username') as string,
-      auth_token: localStorage.getItem('token') as string,
+      token: localStorage.getItem('token') as string,
     };
 
-    this.webSocketService.sendMessage(JSON.stringify(JSON.stringify(message)));
+    console.log(message);
+
+    this.webSocketService.sendMessage(
+      JSON.stringify({ ...message, type: 'sendTeamInfo' })
+    );
+  }
+
+  TraiterUpdateMatchmaking(data: UpdateMatchmaking) {
+    console.log(data);
   }
 }
