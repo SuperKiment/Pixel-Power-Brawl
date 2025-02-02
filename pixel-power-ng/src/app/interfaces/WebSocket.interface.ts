@@ -8,5 +8,15 @@ export interface WebSocketMessage {
 export interface SendTeamInfo {
   pokemonTeam: SimplifiedPokemonTeam;
   username: string;
-  auth_token: string;
+  token: string;
+}
+
+export interface BattleUserInfo {
+  pokemonTeam: SimplifiedPokemonTeam;
+  username: string;
+}
+
+export interface UpdateMatchmaking {
+  updateWaitingUsers: BattleUserInfo[];
+  type: string;
 }
