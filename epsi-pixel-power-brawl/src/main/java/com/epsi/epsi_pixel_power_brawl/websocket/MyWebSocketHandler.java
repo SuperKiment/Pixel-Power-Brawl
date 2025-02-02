@@ -31,16 +31,45 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 		System.out.println("Message reçu : " + message.getPayload());
 
 		try {
-			// Désérialiser le JSON en objet SendTeamInfo
-			SendTeamInfo teamInfo = objectMapper.readValue(message.getPayload(), SendTeamInfo.class);
+			// Convertir le JSON en objet JsonNode pour accéder au champ "type"
+			JsonNode rootNode = objectMapper.readTree(message.getPayload());
+			String type = rootNode.get("type").asText();
 
-			System.out.println(teamInfo.getUsername());
+			switch (type) {
+			case "sendTeamInfo":
+				// Désérialiser le JSON en objet SendTeamInfo
+				SendTeamInfo teamInfo = objectMapper.treeToValue(rootNode, SendTeamInfo.class);
+				System.out.println(teamInfo.getUsername());
 
-			// Ajouter l'utilisateur à la liste d'attente avec son équipe
-			waitingUsers.put(session.getId(),
-					new WaitingUser(session, teamInfo.getUsername(), teamInfo.getPokemonTeam()));
+				// Ajouter l'utilisateur à la liste d'attente avec son équipe
+				waitingUsers.put(session.getId(),
+						new WaitingUser(session, teamInfo.getUsername(), teamInfo.getPokemonTeam()));
 
-			System.out.println(teamInfo.getUsername() + " ajouté à la liste d'attente.");
+				System.out.println(teamInfo.getUsername() + " ajouté à la liste d'attente.");
+				break;
+
+			case "WaitingUserSelected":
+				// Désérialiser le JSON en objet ChatMessage
+				System.out.println(rootNode);
+				WaitingUserSelected waitingUserSelected = objectMapper.treeToValue(rootNode, WaitingUserSelected.class);
+				WaitingUser choosingUser = waitingUsers.get(session.getId());
+				WaitingUser choosenUser = null;
+
+				for (WaitingUser waitingUser : waitingUsers.values()) {
+					if (waitingUser.getUsername().equals(waitingUserSelected.getUsername())) {
+						choosenUser = waitingUser;
+						break;
+					}
+				}
+
+				System.out.println(choosingUser.getUsername() + " a choisi " + choosenUser.getUsername());
+
+				break;
+
+			default:
+				System.err.println("Type de message non reconnu : " + type);
+				break;
+			}
 		} catch (Exception e) {
 			System.err.println("Erreur de parsing du message JSON : " + e.getMessage());
 		}
@@ -106,14 +135,14 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 		public UpdateMatchmaking(Collection<WaitingUser> updateWaitingUsers) {
 			this.updateWaitingUsers = updateWaitingUsers;
 		}
-		
+
 		public Collection<WaitingUser> getUpdateWaitingUsers() {
 			return updateWaitingUsers;
 		}
-		
+
 		public String getType() {
-            return type;
-        }
+			return type;
+		}
 	}
 
 }

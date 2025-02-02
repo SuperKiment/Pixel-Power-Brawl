@@ -8,7 +8,6 @@ public class SendTeamInfo {
 	private String token;
 	private String type;
 
-	// Constructeur vide requis par Jackson
 	public SendTeamInfo() {
 	}
 
