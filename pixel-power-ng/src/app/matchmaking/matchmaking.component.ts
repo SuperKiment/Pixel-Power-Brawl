@@ -92,6 +92,7 @@ export class MatchmakingComponent implements OnInit {
         this.teamChoosingService.getSimplifiedPokemonTeam() ||
         this.teamChoosingService.getSimplifiedDefaultPokemonTeam(),
       username: localStorage.getItem('username') as string,
+      auth_token: localStorage.getItem('token') as string,
     };
 
     this.webSocketService.sendMessage(JSON.stringify(JSON.stringify(message)));
