@@ -9,14 +9,6 @@ export enum Status {
   NO_STATUS = 'Pas de status',
 }
 
-export interface BattlePokemon {
-  pokemon: Pokemon;
-  moves: Move[];
-  status: Status;
-  isConfused: boolean;
-  turnCount: number;
-}
-
 export interface PokemonTeam {
   pokemons: (Pokemon | null)[];
 }

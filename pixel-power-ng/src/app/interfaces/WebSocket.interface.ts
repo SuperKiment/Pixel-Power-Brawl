@@ -26,3 +26,21 @@ export interface BeginBattleInfo {
   username: string;
   type: string;
 }
+
+export interface PokemonBattleUpdate {
+  team1: BattlePokemonTeam;
+  team2: BattlePokemonTeam;
+  p1Turn: boolean;
+  type: string;
+}
+
+export interface BattlePokemon {
+  pokedexID: number;
+  isShiny: boolean;
+  HP: number;
+  DEF: number;
+}
+
+export interface BattlePokemonTeam {
+  battlePokemonList: BattlePokemon[];
+}

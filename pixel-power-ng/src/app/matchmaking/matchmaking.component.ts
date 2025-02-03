@@ -6,8 +6,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { isUserConnected } from '../login-register/login-register.component';
 import { Router } from '@angular/router';
 import {
+  BattlePokemonTeam,
   BattleUserInfo,
   BeginBattleInfo,
+  PokemonBattleUpdate,
   SendTeamInfo,
   UpdateMatchmaking,
 } from '../interfaces/WebSocket.interface';
@@ -24,6 +26,12 @@ export class MatchmakingComponent implements OnInit {
   public waitingUsers: BattleUserInfo[] = [];
   public isBattleOn = false;
   public battleOpponent: BattleUserInfo | null = null;
+  public amPlayer1 = false;
+  public isPlayer1Turn = false;
+  public isItMyTurn = false;
+
+  public battleTeam: BattlePokemonTeam | null = null;
+  public opponentBattleTeam: BattlePokemonTeam | null = null;
 
   constructor(
     private webSocketService: WebSocketService,
@@ -77,6 +85,10 @@ export class MatchmakingComponent implements OnInit {
       case 'BattleBegin':
         this.TraiterBeginBattle(data as BeginBattleInfo);
         break;
+
+      case 'PokemonBattleUpdate':
+        this.TraiterPokemonBattleUpdate(data as PokemonBattleUpdate);
+        break;
     }
   }
 
@@ -127,6 +139,7 @@ export class MatchmakingComponent implements OnInit {
 
   OnWaitingUserSelected(user: BattleUserInfo) {
     console.log('Selected user:', user);
+    this.amPlayer1 = true;
     this.webSocketService.sendMessage(
       JSON.stringify({
         username: user.username,
@@ -145,5 +158,43 @@ export class MatchmakingComponent implements OnInit {
     };
 
     console.log('Battle started:', data);
+  }
+
+  OnAttaque() {
+    this.webSocketService.sendMessage(
+      JSON.stringify({
+        action: 'attack',
+        type: 'BattleAction',
+      })
+    );
+  }
+
+  OnDefense() {
+    this.webSocketService.sendMessage(
+      JSON.stringify({
+        action: 'defense',
+        type: 'BattleAction',
+      })
+    );
+  }
+
+  OnSoin() {
+    this.webSocketService.sendMessage(
+      JSON.stringify({
+        action: 'heal',
+        type: 'BattleAction',
+      })
+    );
+  }
+
+  isMyTurn() {
+    return (this.amPlayer1 && this.isPlayer1Turn) || (!this.amPlayer1 && !this.isPlayer1Turn);
+  }
+
+  TraiterPokemonBattleUpdate(data: PokemonBattleUpdate) {
+    console.log(data);
+    this.isItMyTurn = this.isMyTurn();
+
+    this.isPlayer1Turn = data.p1Turn
   }
 }

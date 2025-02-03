@@ -13,6 +13,12 @@
   <div *ngIf="battleOpponent">
     <h2>Battle !</h2>
     <p>Opposant : {{ battleOpponent.username }}</p>
+
+    <div *ngIf="isMyTurn()">
+      <button (click)="OnAttaque()">Attaque</button>
+      <button (click)="OnDefense()">Défense</button>
+      <button (click)="OnSoin()">Soin</button>
+    </div>
   </div>
 
   <div *ngIf="!battleOpponent">
