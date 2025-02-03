@@ -63,6 +63,18 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 				}
 
 				System.out.println(choosingUser.getUsername() + " a choisi " + choosenUser.getUsername());
+				
+				BattleBegin battleBeginChoosen = new BattleBegin(choosingUser.getPokemonTeam(), choosingUser.getUsername());
+				BattleBegin battleBeginChoosing = new BattleBegin(choosenUser.getPokemonTeam(), choosenUser.getUsername());
+				
+				String battleBeginChoosenStr = objectMapper.writeValueAsString(battleBeginChoosen);
+				String battleBeginChoosingStr = objectMapper.writeValueAsString(battleBeginChoosing);
+				
+				System.out.println("choosen :");
+				System.out.println(battleBeginChoosenStr);
+
+				choosenUser.getSession().sendMessage(new TextMessage(battleBeginChoosenStr));
+				choosingUser.getSession().sendMessage(new TextMessage(battleBeginChoosingStr));
 
 				break;
 
@@ -145,4 +157,27 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 		}
 	}
 
+	private class BattleBegin {
+		private SimplifiedPokemonTeam pokemonTeam;
+		private String username;
+		private final String type = "BattleBegin";
+
+		public BattleBegin(SimplifiedPokemonTeam pokemonTeam, String username) {
+			this.pokemonTeam = pokemonTeam;
+			this.username = username;
+		}
+
+		public SimplifiedPokemonTeam getPokemonTeam() {
+			return pokemonTeam;
+		}
+
+		public String getUsername() {
+			return username;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+	}
 }
