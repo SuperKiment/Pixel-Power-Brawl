@@ -32,7 +32,7 @@ export class MatchmakingComponent implements OnInit {
 
   connect(): void {
     this.webSocketService
-      .connect('ws://192.168.1.17:8081/ws-pokemon-matchmaking')
+      .connect('ws://localhost:8081/ws-pokemon-matchmaking')
       .subscribe((event: Event) => {
         this.updateIsConnected();
         this.traiterEvent(event);

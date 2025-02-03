@@ -44,10 +44,10 @@
       </div>
     </div>
 
-    <button type="submit" [disabled]="authForm.invalid">
+    <button type="submit" id="login" [disabled]="authForm.invalid">
       {{ isLoginMode ? "Se connecter" : "S'inscrire" }}
     </button>
-    <button type="button" (click)="toggleMode()">
+    <button type="button" id="submit" (click)="toggleMode()">
       {{ isLoginMode ? "S'inscrire" : "Se connecter" }}
     </button>
   </form>
