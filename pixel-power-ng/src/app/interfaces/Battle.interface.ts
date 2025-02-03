@@ -34,5 +34,5 @@ export enum GameStateEnum {
 
 export interface GameState {
   turnCount: number;
-  state: GameStateEnum;
+  battleState: GameStateEnum;
 }

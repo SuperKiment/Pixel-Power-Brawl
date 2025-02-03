@@ -7,6 +7,7 @@ import { isUserConnected } from '../login-register/login-register.component';
 import { Router } from '@angular/router';
 import {
   BattleUserInfo,
+  BeginBattleInfo,
   SendTeamInfo,
   UpdateMatchmaking,
 } from '../interfaces/WebSocket.interface';
@@ -21,6 +22,8 @@ import {
 export class MatchmakingComponent implements OnInit {
   public isConnected = false;
   public waitingUsers: BattleUserInfo[] = [];
+  public isBattleOn = false;
+  public battleOpponent: BattleUserInfo | null = null;
 
   constructor(
     private webSocketService: WebSocketService,
@@ -71,8 +74,8 @@ export class MatchmakingComponent implements OnInit {
         console.log('UpdateMatchmaking received');
         this.TraiterUpdateMatchmaking(data as UpdateMatchmaking);
         break;
-      case 'UpdateBattle':
-        console.log('UpdateMatchmaking received');
+      case 'BattleBegin':
+        this.TraiterBeginBattle(data as BeginBattleInfo);
         break;
     }
   }
@@ -130,5 +133,17 @@ export class MatchmakingComponent implements OnInit {
         type: 'WaitingUserSelected',
       })
     );
+  }
+
+  TraiterBeginBattle(data: BeginBattleInfo) {
+    if (!data.pokemonTeam || !data.username) return;
+
+    this.isBattleOn = true;
+    this.battleOpponent = {
+      pokemonTeam: data.pokemonTeam,
+      username: data.username,
+    };
+
+    console.log('Battle started:', data);
   }
 }

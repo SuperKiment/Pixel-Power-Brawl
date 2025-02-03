@@ -20,3 +20,9 @@ export interface UpdateMatchmaking {
   updateWaitingUsers: BattleUserInfo[];
   type: string;
 }
+
+export interface BeginBattleInfo {
+  pokemonTeam: SimplifiedPokemonTeam;
+  username: string;
+  type: string;
+}

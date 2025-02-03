@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="!isBattleOn">
   <h2>Matchmaking</h2>
   <div *ngIf="!isConnected">
     <button (click)="connect()">Reconnecter au serveur</button>
@@ -6,5 +6,16 @@
 
   <div *ngFor="let user of waitingUsers">
     <button (click)="OnWaitingUserSelected(user)">{{ user.username }}</button>
+  </div>
+</div>
+
+<div *ngIf="isBattleOn">
+  <div *ngIf="battleOpponent">
+    <h2>Battle !</h2>
+    <p>Opposant : {{ battleOpponent.username }}</p>
+  </div>
+
+  <div *ngIf="!battleOpponent">
+    <h2>Oops</h2>
   </div>
 </div>
