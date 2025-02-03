@@ -13,6 +13,7 @@ import {
   SendTeamInfo,
   UpdateMatchmaking,
 } from '../interfaces/WebSocket.interface';
+import { API_URL } from '../environment';
 
 @Component({
   standalone: true,
@@ -48,7 +49,7 @@ export class MatchmakingComponent implements OnInit {
 
   connect(): void {
     this.webSocketService
-      .connect('ws://localhost:8081/ws-pokemon-matchmaking')
+      .connect(`ws://${API_URL}ws-pokemon-matchmaking`)
       .subscribe((event: Event) => {
         this.updateIsConnected();
         this.traiterEvent(event);
