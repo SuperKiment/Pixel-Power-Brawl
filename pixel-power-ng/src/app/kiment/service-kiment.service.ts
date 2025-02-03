@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import fetchAuth from '../utils/fetch-auth';
+import { API_URL } from '../environment';
 
 export interface Article {
   nom: string;
@@ -15,7 +16,7 @@ export interface Article {
 })
 export class ServiceKimentService {
   private liste: Article[] = [];
-  private urlAPI: string = 'http://localhost:8081';
+  private urlAPI: string = `http://${API_URL}`;
 
   constructor(private httpClient: HttpClient) {}
 

@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class TeamChoosingService {
-  private urlPokemonAPI = API_URL + 'pokemons';
+  private urlPokemonAPI = "http://" + API_URL + 'pokemons';
   private pokemonTeam: PokemonTeam | null = null;
 
   constructor(private httpClient: HttpClient, private router: Router) {

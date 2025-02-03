@@ -1,1 +1,2 @@
-export const API_URL = 'http://api-url/';
+//Ne pas mettre le http://
+export const API_URL = 'api-url/';

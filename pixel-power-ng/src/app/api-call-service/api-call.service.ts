@@ -21,11 +21,11 @@ interface RegisterBody {
   providedIn: 'root',
 })
 export class ApiCallService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
   public login(body: LoginBody): Observable<{ token: string }> {
     return this.httpClient
-      .post<{ token: string }>(API_URL + 'user/login', body, {
+      .post<{ token: string }>("http://" + API_URL + 'user/login', body, {
         responseType: 'json',
       })
       .pipe(catchError(this.handleError));
@@ -33,7 +33,7 @@ export class ApiCallService {
 
   public register(body: RegisterBody): Observable<{ response: string }> {
     return this.httpClient
-      .post<{ response: string }>(API_URL + 'user/registration', body, {
+      .post<{ response: string }>("http://" + API_URL + 'user/registration', body, {
         responseType: 'json',
       })
       .pipe(catchError(this.handleError));

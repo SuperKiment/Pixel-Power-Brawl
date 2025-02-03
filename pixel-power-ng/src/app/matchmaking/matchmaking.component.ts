@@ -5,7 +5,15 @@ import { TeamChoosingService } from '../team-choosing/team-choosing.service';
 import { HttpClientModule } from '@angular/common/http';
 import { isUserConnected } from '../login-register/login-register.component';
 import { Router } from '@angular/router';
-import { SendTeamInfo } from '../interfaces/WebSocket.interface';
+import {
+  BattlePokemonTeam,
+  BattleUserInfo,
+  BeginBattleInfo,
+  PokemonBattleUpdate,
+  SendTeamInfo,
+  UpdateMatchmaking,
+} from '../interfaces/WebSocket.interface';
+import { API_URL } from '../environment';
 
 @Component({
   standalone: true,
@@ -16,6 +24,15 @@ import { SendTeamInfo } from '../interfaces/WebSocket.interface';
 })
 export class MatchmakingComponent implements OnInit {
   public isConnected = false;
+  public waitingUsers: BattleUserInfo[] = [];
+  public isBattleOn = false;
+  public battleOpponent: BattleUserInfo | null = null;
+  public amPlayer1 = false;
+  public isPlayer1Turn = false;
+  public isItMyTurn = false;
+
+  public battleTeam: BattlePokemonTeam | null = null;
+  public opponentBattleTeam: BattlePokemonTeam | null = null;
 
   constructor(
     private webSocketService: WebSocketService,
@@ -32,7 +49,7 @@ export class MatchmakingComponent implements OnInit {
 
   connect(): void {
     this.webSocketService
-      .connect('ws://localhost:8081/ws-pokemon-matchmaking')
+      .connect(`ws://${API_URL}ws-pokemon-matchmaking`)
       .subscribe((event: Event) => {
         this.updateIsConnected();
         this.traiterEvent(event);
@@ -59,7 +76,21 @@ export class MatchmakingComponent implements OnInit {
   }
 
   traiterMessage(event: MessageEvent): void {
-    console.log('Received message:', event.data);
+    const data = JSON.parse(event.data);
+
+    switch (data.type) {
+      case 'UpdateMatchmaking':
+        console.log('UpdateMatchmaking received');
+        this.TraiterUpdateMatchmaking(data as UpdateMatchmaking);
+        break;
+      case 'BattleBegin':
+        this.TraiterBeginBattle(data as BeginBattleInfo);
+        break;
+
+      case 'PokemonBattleUpdate':
+        this.TraiterPokemonBattleUpdate(data as PokemonBattleUpdate);
+        break;
+    }
   }
 
   sendMessage(): void {
@@ -92,8 +123,79 @@ export class MatchmakingComponent implements OnInit {
         this.teamChoosingService.getSimplifiedPokemonTeam() ||
         this.teamChoosingService.getSimplifiedDefaultPokemonTeam(),
       username: localStorage.getItem('username') as string,
+      token: localStorage.getItem('token') as string,
     };
 
-    this.webSocketService.sendMessage(JSON.stringify(JSON.stringify(message)));
+    console.log(message);
+
+    this.webSocketService.sendMessage(
+      JSON.stringify({ ...message, type: 'sendTeamInfo' })
+    );
+  }
+
+  TraiterUpdateMatchmaking(data: UpdateMatchmaking) {
+    console.log(data);
+    this.waitingUsers = data.updateWaitingUsers;
+  }
+
+  OnWaitingUserSelected(user: BattleUserInfo) {
+    console.log('Selected user:', user);
+    this.amPlayer1 = true;
+    this.webSocketService.sendMessage(
+      JSON.stringify({
+        username: user.username,
+        type: 'WaitingUserSelected',
+      })
+    );
+  }
+
+  TraiterBeginBattle(data: BeginBattleInfo) {
+    if (!data.pokemonTeam || !data.username) return;
+
+    this.isBattleOn = true;
+    this.battleOpponent = {
+      pokemonTeam: data.pokemonTeam,
+      username: data.username,
+    };
+
+    console.log('Battle started:', data);
+  }
+
+  OnAttaque() {
+    this.webSocketService.sendMessage(
+      JSON.stringify({
+        action: 'attack',
+        type: 'BattleAction',
+      })
+    );
+  }
+
+  OnDefense() {
+    this.webSocketService.sendMessage(
+      JSON.stringify({
+        action: 'defense',
+        type: 'BattleAction',
+      })
+    );
+  }
+
+  OnSoin() {
+    this.webSocketService.sendMessage(
+      JSON.stringify({
+        action: 'heal',
+        type: 'BattleAction',
+      })
+    );
+  }
+
+  isMyTurn() {
+    return (this.amPlayer1 && this.isPlayer1Turn) || (!this.amPlayer1 && !this.isPlayer1Turn);
+  }
+
+  TraiterPokemonBattleUpdate(data: PokemonBattleUpdate) {
+    console.log(data);
+    this.isItMyTurn = this.isMyTurn();
+
+    this.isPlayer1Turn = data.p1Turn
   }
 }
