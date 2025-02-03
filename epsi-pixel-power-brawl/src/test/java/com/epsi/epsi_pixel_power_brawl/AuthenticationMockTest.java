@@ -21,7 +21,7 @@ import com.epsi.epsi_pixel_power_brawl.service.UserService;
 import com.epsi.epsi_pixel_power_brawl.util.jwt.JwtUtil;
 
 @ExtendWith(MockitoExtension.class)
-public class AuthenticationMockUnitTest {
+public class AuthenticationMockIntegTest {
 	
 	
     @Value("${test.username}")
