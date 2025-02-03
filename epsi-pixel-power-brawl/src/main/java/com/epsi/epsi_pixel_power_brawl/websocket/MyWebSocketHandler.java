@@ -1,6 +1,5 @@
 package com.epsi.epsi_pixel_power_brawl.websocket;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -11,6 +10,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,6 +20,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
 	private final ConcurrentHashMap<String, WaitingUser> waitingUsers = new ConcurrentHashMap<>();
 	private final ObjectMapper objectMapper = new ObjectMapper();
+	private final List<PokemonBattle> battles = new ArrayList<PokemonBattle>();
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) {
@@ -63,18 +64,58 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 				}
 
 				System.out.println(choosingUser.getUsername() + " a choisi " + choosenUser.getUsername());
-				
-				BattleBegin battleBeginChoosen = new BattleBegin(choosingUser.getPokemonTeam(), choosingUser.getUsername());
-				BattleBegin battleBeginChoosing = new BattleBegin(choosenUser.getPokemonTeam(), choosenUser.getUsername());
-				
+
+				BattleBegin battleBeginChoosen = new BattleBegin(choosingUser.getPokemonTeam(),
+						choosingUser.getUsername());
+				BattleBegin battleBeginChoosing = new BattleBegin(choosenUser.getPokemonTeam(),
+						choosenUser.getUsername());
+
 				String battleBeginChoosenStr = objectMapper.writeValueAsString(battleBeginChoosen);
 				String battleBeginChoosingStr = objectMapper.writeValueAsString(battleBeginChoosing);
-				
+
 				System.out.println("choosen :");
 				System.out.println(battleBeginChoosenStr);
 
 				choosenUser.getSession().sendMessage(new TextMessage(battleBeginChoosenStr));
 				choosingUser.getSession().sendMessage(new TextMessage(battleBeginChoosingStr));
+
+				battles.add(new PokemonBattle(choosingUser, choosenUser));
+
+				break;
+
+			case "BattleAction":
+				WaitingUser battleUser = waitingUsers.get(session.getId());
+				PokemonBattle battle = findUserInBattle(battleUser);
+				UserBattleAction userBattleAction = objectMapper.treeToValue(rootNode, UserBattleAction.class);
+
+				if (battle == null) {
+					System.err.println("Utilisateur non trouvé dans une bataille.");
+					return;
+				}
+
+				PokemonBattleUpdate update = null;
+
+				System.out.println(userBattleAction.getAction());
+
+				switch (userBattleAction.getAction()) {
+				case "attack":
+					update = battle.Turn(BattleAction.ATTACK);
+					break;
+				case "defense":
+					update = battle.Turn(BattleAction.DEFEND);
+					break;
+				case "heal":
+					update = battle.Turn(BattleAction.HEAL);
+					break;
+				}
+
+				if (update != null) {
+					String updateJson = objectMapper.writeValueAsString(update);
+					System.out.println("Mise à jour de la bataille : " + updateJson);
+					battle.getUser1().getSession().sendMessage(new TextMessage(updateJson));
+					battle.getUser2().getSession().sendMessage(new TextMessage(updateJson));
+				}
+				System.out.println("Fin du tour");
 
 				break;
 
@@ -106,37 +147,12 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			String userListJson = objectMapper.writeValueAsString(update);
 
 			for (WaitingUser user : waitingUsers.values()) {
-				user.getSession().sendMessage(new TextMessage(userListJson));
+				if (findUserInBattle(user) == null)
+					user.getSession().sendMessage(new TextMessage(userListJson));
 			}
 
-			System.out.println("Liste des utilisateurs en attente envoyée.");
 		} catch (IOException e) {
 			System.err.println("Erreur d'envoi des utilisateurs en attente : " + e.getMessage());
-		}
-	}
-
-	private static class WaitingUser {
-		@JsonIgnore
-		private final WebSocketSession session;
-		private final String username;
-		private final SimplifiedPokemonTeam pokemonTeam;
-
-		public WaitingUser(WebSocketSession session, String username, SimplifiedPokemonTeam pokemonTeam) {
-			this.session = session;
-			this.username = username;
-			this.pokemonTeam = pokemonTeam;
-		}
-
-		public WebSocketSession getSession() {
-			return session;
-		}
-
-		public String getUsername() {
-			return username;
-		}
-
-		public SimplifiedPokemonTeam getPokemonTeam() {
-			return pokemonTeam;
 		}
 	}
 
@@ -179,5 +195,15 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			return type;
 		}
 
+	}
+
+	private PokemonBattle findUserInBattle(WaitingUser user) {
+		for (PokemonBattle battle : battles) {
+			if (battle.getUser1().getUsername().equals(user.getUsername())
+					|| battle.getUser2().getUsername().equals(user.getUsername())) {
+				return battle;
+			}
+		}
+		return null;
 	}
 }
