@@ -1,12 +1,16 @@
 package com.epsi.epsi_pixel_power_brawl.service;
 
 import com.epsi.epsi_pixel_power_brawl.repository.UserRepository;
+import com.epsi.epsi_pixel_power_brawl.util.exception.PasswordDoesNotMatchException;
 
 import jakarta.transaction.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hibernate.boot.model.relational.SqlStringGenerationContext;
+import org.openqa.selenium.devtools.v121.media.model.PlayerErrorsRaised;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,10 +53,12 @@ public class UserService implements IUserService {
     	
     	if (user != null) {
     		if (passwordEncoder.matches(password, user.getPassword())) {
+    			user.setLastLoginDateTime(LocalDateTime.now());
     			return true;
     		}
+        	throw new PasswordDoesNotMatchException("Entered password does not match the user's password");
         }
-        return false;
+    	throw new UsernameNotFoundException("No account with that username has been found");
 
     }
     

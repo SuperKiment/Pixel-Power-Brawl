@@ -31,13 +31,14 @@ public class LoginController {
 	public ResponseEntity<Map<String, String>> login(@RequestBody LoginDto loginDto) {
         if (userService.authenticate(loginDto.getUsername(), loginDto.getPassword())) {
             String jwtToken = jwtUtil.generateToken(loginDto.getUsername());
+            
             Map<String, String> response = new HashMap<>();
             response.put("token", jwtToken);
             return ResponseEntity.ok(response);
         }
         
         Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("error", "Invalid credentials");
+        errorResponse.put("error", "Informations d'identifications erronées");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 }

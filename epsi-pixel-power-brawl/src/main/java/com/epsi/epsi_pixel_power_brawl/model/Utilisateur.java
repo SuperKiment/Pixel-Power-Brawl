@@ -19,6 +19,7 @@ import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +36,7 @@ public class Utilisateur implements UserDetails {
 
     private String username;
     private String password;
+    private LocalDateTime lastLoginDateTime;
     private boolean enabled;
     private boolean accountNonExpired;
     private boolean credentialsNonExpired;
@@ -43,14 +45,13 @@ public class Utilisateur implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "utilisateur_roles", joinColumns = @JoinColumn(name = "utilisateur_id"))
     @Column(name = "role")
-    private List<String> roles;  // Many-to-many relationship with Role
+    private List<String> roles;
 
-    // Getters and setters
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
-                .map(SimpleGrantedAuthority::new) // Convert role names directly to GrantedAuthority
-                .collect(Collectors.toList()); // Collect as a List
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override

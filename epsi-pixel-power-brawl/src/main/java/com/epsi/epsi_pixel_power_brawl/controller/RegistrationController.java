@@ -27,11 +27,9 @@ import jakarta.validation.Valid;
 
 @Controller
 public class RegistrationController {
-	
-    ModelAndView mav = new ModelAndView();  // Initialize ModelAndView
-	
+		
 	 @Autowired
-	 private UserService userService; // Dependency injection
+	 private UserService userService;
 
 	@PostMapping("/user/registration")
 	@ResponseBody

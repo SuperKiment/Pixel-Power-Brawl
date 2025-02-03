@@ -24,5 +24,4 @@ public class RegisterDto {
     @NotEmpty
     private String matchingPassword;
         
-    // standard getters and setters
 }

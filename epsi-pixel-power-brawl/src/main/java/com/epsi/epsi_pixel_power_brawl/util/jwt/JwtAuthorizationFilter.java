@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.epsi.epsi_pixel_power_brawl.config.PublicRoutes;
@@ -31,6 +32,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 	
 	@Autowired
     private UserDetailsService userDetailsService;
+	
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     public JwtAuthorizationFilter(JwtUtil jwtUtil, UserDetailsService userDetailsService) {
         this.jwtUtil = jwtUtil;
@@ -42,10 +45,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
     	
     	String path = request.getServletPath();
-    	if (publicRoutes.getPublicRoutes().contains(path)) {
-
-            filterChain.doFilter(request, response);
-            return;
+        for (String publicRoute : publicRoutes.getPublicRoutes()) {
+            if (pathMatcher.match(publicRoute, path)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
         }
 
         String authHeader = request.getHeader("Authorization");
