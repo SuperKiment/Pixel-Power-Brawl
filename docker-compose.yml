@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: pixel_postgres
+    environment:
+      POSTGRES_DB: pixelpowerbrawl
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: ./epsi-pixel-power-brawl
+    container_name: pixel_api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+
+  frontend:
+    build: ./pixel-power-ng
+    container_name: pixel_frontend
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./pixel-power-ng:/app
+      - /app/node_modules

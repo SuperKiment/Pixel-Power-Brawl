@@ -25,7 +25,7 @@ public class PokemonService {
 	private WebClient webClient;
 	
 	public List<PokemonDto> getAllPokemons() {
-		String jsonResponse = webClient.get().uri("https://tyradex.vercel.app/api/v1/pokemon").retrieve()
+		String jsonResponse = webClient.get().uri("https://tyradex.app/api/v1/pokemon").retrieve()
 				.bodyToMono(String.class).block();
 
 		ObjectMapper objectMapper = new ObjectMapper();
